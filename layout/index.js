@@ -2,7 +2,7 @@ import { Box } from '@mui/material';
 
 import AppBarSection from './appBar';
 
-export default function Layout({ chidlren }) {
+export default function Layout({ children }) {
   return (
     <>
       <AppBarSection />
@@ -10,7 +10,7 @@ export default function Layout({ chidlren }) {
       {/* Space for fixed appbar */}
       <Box mt={8}></Box>
 
-      {chidlren}
+      {children}
     </>
   );
 }
