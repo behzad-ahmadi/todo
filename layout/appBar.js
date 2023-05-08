@@ -8,6 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useAppTheme } from '@/context/themeContext';
 import { Brightness4, Brightness7 } from '@mui/icons-material';
+import Link from 'next/link';
 
 export default function AppBarSection() {
   const { toggleMode, theme } = useAppTheme();
@@ -27,7 +28,8 @@ export default function AppBarSection() {
           </IconButton>
 
           <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
-            Todo List
+            <Link href={'/'}> Main Page</Link>{' '}
+            <Link href={'/new_todo'}> Todo List</Link>
           </Typography>
 
           <IconButton onClick={toggleMode} color='inherit'>
