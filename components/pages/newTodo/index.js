@@ -2,7 +2,6 @@ import { Add } from '@mui/icons-material';
 import {
   Box,
   Checkbox,
-  Container,
   FormControl,
   FormControlLabel,
   IconButton,
@@ -14,7 +13,8 @@ import * as React from 'react';
 import * as yup from 'yup';
 
 export default function NewTodo({ task }) {
-  const [items, setItems] = React.useState(task?.items);
+  const [items, setItems] = React.useState(task?.items || []);
+  const [taskId, setTaskid] = React.useState();
 
   // Validation Schema
   const validationSchema = yup.object({
@@ -29,23 +29,43 @@ export default function NewTodo({ task }) {
 
     onSubmit: (values) => {
       // const _items = [...formik.values.items];
-
-      setItems((prev) => [
+      const _items = [
         {
-          id: items.length + 1,
+          id: crypto.randomUUID(),
           title: values.taskItem,
           checked: false,
         },
-        ...prev,
-      ]);
+        ...items,
+      ];
+
+      setItems(_items);
+
+      if (!taskId) {
+        console.log('NOT PRESENT');
+        const _taskid = crypto.randomUUID();
+        setTaskid(_taskid);
+
+        localStorage.setItem(
+          _taskid,
+          JSON.stringify({ id: taskId, items: _items })
+        );
+      } else
+        localStorage.setItem(
+          taskId,
+          JSON.stringify({ id: taskId, items: _items })
+        );
 
       formik.resetForm();
-      console.log('Values', values);
     },
   });
 
   // initial
-  React.useEffect(() => {}, []);
+  React.useEffect(() => {
+    if (!task) return;
+    setTaskid(task.id);
+    setItems(task.items);
+    console.log('use', task);
+  }, [task]);
 
   const checkboxChangeHandler = (e) => {
     const _items = [...items];
