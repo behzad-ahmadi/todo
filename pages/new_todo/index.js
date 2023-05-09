@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import NewTodo from '../../components/pages/newTodo';
 
 export default function NewTodoPage() {
