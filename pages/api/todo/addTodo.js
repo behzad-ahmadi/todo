@@ -2,9 +2,10 @@ import { connectDatabase, insertDocument } from '@/lib/db-util';
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
-    const todo = req.body.todo;
+    const newTodo = req.body.todo;
 
-    if (!todo.title && (!todo.items || todo.items.length == 0)) {
+    // return error if data is epmty
+    if (!newTodo?.title && (!newTodo?.items || newTodo?.items.length == 0)) {
       res.status(422).json({ message: "Empty todo can't be inserted" });
       return;
     }
@@ -19,8 +20,6 @@ export default async function handler(req, res) {
     }
 
     try {
-      const newTodo = { uid: 100, items: [{ title: 't1' }, { title: 't2' }] };
-
       const result = await insertDocument({
         client: client,
         collection: 'todo',
@@ -31,10 +30,13 @@ export default async function handler(req, res) {
 
       res.status(201).json({ message: 'Added new todo.', todo: newTodo });
     } catch (error) {
-      res.status(500).json({ message: 'Inserting to the collection failed!' });
+      console.log('error', error);
+      res.status(500).json({ error: 'Inserting to the collection failed!' });
       return;
     } finally {
       await client.close();
     }
+  } else {
+    res.status(400).json({ message: 'Bas Request' });
   }
 }
