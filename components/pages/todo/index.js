@@ -12,7 +12,7 @@ import { useFormik } from 'formik';
 import * as React from 'react';
 import * as yup from 'yup';
 
-export default function NewTodo({ task }) {
+export default function todo({ task }) {
   const [items, setItems] = React.useState(task?.items || []);
   const [taskId, setTaskid] = React.useState();
 

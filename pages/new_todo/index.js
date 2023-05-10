@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import NewTodo from '../../components/pages/newTodo';
+import todo from '../../components/pages/todo';
 
 export default function NewTodoPage() {
   const [task, setTask] = useState();
 
   console.log('task Page', task);
-  return <NewTodo task={task} />;
+  return <todo task={task} />;
 }
