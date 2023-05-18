@@ -2,11 +2,13 @@ import { connectDatabase, insertDocument } from '@/lib/db-util';
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
-    const newTodo = req.body.todo;
-
+    const newTodo = req.body;
+    console.log('newTodo', newTodo);
     // return error if data is epmty
-    if (!newTodo?.title && (!newTodo?.items || newTodo?.items.length == 0)) {
-      res.status(422).json({ message: "Empty todo can't be inserted" });
+    console.log('len', newTodo.length);
+
+    if (!newTodo) {
+      res.status(422).json({ message: "Empty todo can't be inserted." });
       return;
     }
 
@@ -37,6 +39,6 @@ export default async function handler(req, res) {
       await client.close();
     }
   } else {
-    res.status(400).json({ message: 'Bas Request' });
+    res.status(400).json({ message: 'Bad Request' });
   }
 }

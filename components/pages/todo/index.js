@@ -1,3 +1,4 @@
+import { addTodo } from '@/lib/api-util';
 import { Add } from '@mui/icons-material';
 import {
   Box,
@@ -27,11 +28,10 @@ export default function Todo({ task }) {
 
     validationSchema: validationSchema,
 
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       // const _items = [...formik.values.items];
       const _items = [
         {
-          id: crypto.randomUUID(),
           title: values.taskItem,
           checked: false,
         },
@@ -40,22 +40,25 @@ export default function Todo({ task }) {
 
       setItems(_items);
 
+      // Insert new todo
       if (!taskId) {
-        console.log('NOT PRESENT');
-        const _taskid = crypto.randomUUID();
-        setTaskid(_taskid);
+        console.log('Inserting');
 
-        localStorage.setItem(
-          _taskid,
-          JSON.stringify({ id: taskId, items: _items })
-        );
-      } else
-        localStorage.setItem(
-          taskId,
-          JSON.stringify({ id: taskId, items: _items })
-        );
+        try {
+          const result = await addTodo({ items: _items });
 
-      formik.resetForm();
+          setTaskid(result.todo._id);
+          console.log('DATA', result);
+
+          formik.resetForm();
+        } catch (error) {
+          console.log('error', error);
+        }
+      }
+      // Update todo
+      else {
+        console.log('Updating...');
+      }
     },
   });
 
@@ -112,11 +115,11 @@ export default function Todo({ task }) {
         {/* Task list */}
         <Box sx={{ textAlign: 'start' }}>
           <FormControl>
-            {items?.map((t) => {
+            {items?.map((t, idx) => {
               return (
                 <FormControlLabel
-                  key={t.id}
-                  name={t.id.toString()}
+                  key={idx}
+                  name={idx}
                   control={
                     <Checkbox
                       color='success'
